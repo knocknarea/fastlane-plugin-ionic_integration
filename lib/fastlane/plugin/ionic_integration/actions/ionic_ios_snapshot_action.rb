@@ -26,13 +26,12 @@ module Fastlane
 
         UI.message "Found #{schemes}..."
         schemes.each do |scheme_path|
-          #UI.message("Processing Test Scheme #{scheme_path}")
+          # UI.message("Processing Test Scheme #{scheme_path}")
           generate_xcode_unit_test(scheme_path, xcode_project, team_id, bundle_id, target_os)
         end
       end
 
       def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
-        
         scheme_name = File.basename(config_folder)
         xcode_folder = File.dirname(xcode_project_path)
         project_name = File.basename(xcode_project_path, ".xcodeproj")
@@ -46,33 +45,31 @@ module Fastlane
         # Find existing Target and remove it
         #
         target = nil
-        proj.targets.each do | t |
-          if t.name == scheme_name
-            UI.important "Found existing Target #{t.name}. Will be replaced."
-            target = t
-            break
-          end
+        proj.targets.each do |t|
+          next unless t.name == scheme_name
+          UI.important "Found existing Target #{t.name}. Will be replaced."
+          target = t
+          break
         end
 
         #
         # Find existing code group or unit tests and remove if needed.
         #
         snapGrp = nil
-        proj.groups.each do | g |
-          if g.name == scheme_name
-            g.clear
-            snapGrp = g
-              UI.important "Found existing Code Group #{g.name}. Will be replaced."
-            break
-          end
+        proj.groups.each do |g|
+          next unless g.name == scheme_name
+          g.clear
+          snapGrp = g
+          UI.important "Found existing Code Group #{g.name}. Will be replaced."
+          break
         end
 
         #
         # Remove existing targets and groups if required.
         #
-        target == nil || target.remove_from_project
-        snapGrp == nil || snapGrp.remove_from_project
-        
+        target.nil? || target.remove_from_project
+        snapGrp.nil? || snapGrp.remove_from_project
+
         target = nil
         snapGrp = nil
 
@@ -80,12 +77,11 @@ module Fastlane
         # Ok, let's rock and roll
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
-        snapGrp = proj.new_group("#{scheme_name}")
-         
+        snapGrp = proj.new_group(scheme_name.to_s)
 
         UI.message "Finding Main Target (of the Project)..."
         main_target = nil
-        proj.root_object.targets.each do | t |
+        proj.root_object.targets.each do |t|
           if t.name == project_name
             UI.message "Found main target as #{t.name}"
             main_target = t
@@ -93,35 +89,34 @@ module Fastlane
         end
 
         main_target || UI.user_error!("Unable to locate Main Target for Ionic App in #{project_name}")
-           
+
         # Create a product for our ui unit test
         product_ref = proj.products_group.new_reference(scheme_name + '.xctest', :built_products)
 
-        target = Xcodeproj::Project::ProjectHelper.new_target(proj, :ui_test_bundle, 
-              scheme_name, :ios, target_os, proj.products_group, :swift)
+        target = Xcodeproj::Project::ProjectHelper.new_target(proj, :ui_test_bundle,
+                                                              scheme_name, :ios, target_os, proj.products_group, :swift)
 
         target.product_reference = product_ref
 
-        UI.message "Adding Main Target Dependency: " + main_target.to_s()
+        UI.message "Adding Main Target Dependency: " + main_target.to_s
         target.add_dependency(main_target)
 
         # We need to save here for some reason... xcodeproj?
         proj.save
-            
+
         UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group #{scheme_name}"
         files = []
 
         # Link our fastlane configured UI Unit Tests into the project
-        Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each { 
-            |file| 
-            UI.message "Adding UI Test Source #{file}"
-            files << snapGrp.new_reference(File.absolute_path(file)) 
-          }
+        Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
+          UI.message "Adding UI Test Source #{file}"
+          files << snapGrp.new_reference(File.absolute_path(file))
+        end
 
         target.add_file_references(files)
 
         UI.message "Configuring Project Metadata..."
-        
+
         # We may need to switch here on compatibility versions, this is for Xcode 8.0
         # Fasten your seatbelts, it gets bumpy from here on in..
         target_config = {
@@ -133,10 +128,9 @@ module Fastlane
 
         if proj.root_object.attributes['TargetAttributes']
           proj.root_object.attributes['TargetAttributes'].store(target.uuid, target_config)
-        elsif 
-          proj.root_object.attributes.store('TargetAttributes', {target.uuid => target_config} )
+        elsif
+          proj.root_object.attributes.store('TargetAttributes', { target.uuid => target_config })
         end
-            
 
         target.build_configuration_list.set_setting('INFOPLIST_FILE', "#{scheme_name}/Info.plist")
         target.build_configuration_list.set_setting('SWIFT_VERSION', '3.0')
@@ -151,13 +145,13 @@ module Fastlane
         existingScheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
 
         UI.message "Generating XCode Scheme #{scheme_name} to run UI Snapshot Tests"
-        scheme = File.exists?(existingScheme) ? Xcodeproj::XCScheme.new(existingScheme) : Xcodeproj::XCScheme.new 
+        scheme = File.exist?(existingScheme) ? Xcodeproj::XCScheme.new(existingScheme) : Xcodeproj::XCScheme.new
 
         scheme.add_test_target(target)
 
         scheme.add_build_target(main_target)
         scheme.set_launch_target(main_target)
-        
+
         scheme.save_as(xcode_project_path, scheme_name)
 
         UI.success "Completed Retrofit of #{scheme_name} in Ionic Generated XCode Project #{project_name} OK... SAVING"
