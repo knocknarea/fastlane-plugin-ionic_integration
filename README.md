@@ -4,6 +4,8 @@
 
 ## Getting Started
 
+**NOTE** This is hot off the press and I am still testing it locally, so hang tight
+
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-ionic_integration`, add it to your project by running:
 
 ```bash
