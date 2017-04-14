@@ -1,4 +1,5 @@
 require 'fastlane/plugin/ionic_integration/version'
+require 'fastlane/plugin/ionic_integration/constants'
 
 module Fastlane
   module IonicIntegration

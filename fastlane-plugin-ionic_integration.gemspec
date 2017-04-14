@@ -1,4 +1,5 @@
 # coding: utf-8
+
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastlane/plugin/ionic_integration/version'
@@ -6,10 +7,10 @@ require 'fastlane/plugin/ionic_integration/version'
 Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-ionic_integration'
   spec.version       = Fastlane::IonicIntegration::VERSION
-  spec.author        = %q{Adrian Regan}
-  spec.email         = %q{adrian@littlevista.net}
+  spec.author        = 'Adrian Regan'
+  spec.email         = 'adrian@littlevista.net'
 
-  spec.summary       = %q{Integrating Fastlane with Ionic Generated Projects}
+  spec.summary       = 'Integrating Fastlane with Ionic Generated Projects'
   # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-ionic_integration"
   spec.license       = "MIT"
 
@@ -28,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'fastlane', '>= 2.26.1'
+  spec.add_development_dependency 'fakefs'
 end

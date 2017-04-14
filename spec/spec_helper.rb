@@ -6,5 +6,6 @@ end
 
 require 'fastlane' # to import the Action super class
 require 'fastlane/plugin/ionic_integration' # import the actual plugin
+require 'fastlane/plugin/ionic_integration/constants' # relevant constants
 
 Fastlane.load_actions # load other actions (in case your plugin calls other actions or shared values)
