@@ -55,15 +55,42 @@ In this folder will be the standard test files that you would expect for a UI Un
 
 **ionic_ios_config_snapshot** also executes the *ionic_config_snapshot* action to retrofit this unit test configuration into any existing XCode Project
 
+When this is done. The sample will be linked into your generated project. In the above example, a UI Test scheme will be created in **fastlane/ionic/config/ios/ui-tests/blah-blah**. The files in this folder are linked absolutely into Xcode, that is Xcode refers directly to these files (they are not copied over to Xcode)
 
-To ensure that your configured unit tests are setup do:
+If you open up Xcode and open the file 'blah-blah/ui-snapshots.swift' you will see something like this:
+
+```
+    func testSnapshots() {
+
+        //
+        // Place your own tests here. This is a starter example to get you going..
+        //
+        snapshot("app-launch")
+        
+        // XCUIApplication().buttons["Your Button Name"].tap()
+        
+        // snapshot("after-button-pressed")
+                
+    }
+```
+In the XCode UI, select the scheme 'blah-blah' and click into the method 'testSnapshots()' (after the first snapshot). Then Run the scheme. 
+This will open the simulator and you can click around in your application. XCode will record, each interaction within the 
+testSnapshots() method.
+
+When you are done, you can save everthing and it will save those interactions into the fastlane/ionic/config/ios/ui-tests/ui-snapshots.swift.
+
+You can now add fastlane ```snapshot("decription")``` where you like.
+
+This whole operation only needs to be done once (or if you want to add more screenshots later). The UI Test files can be added to your source control and they will be retrofitted into any future generated Ionic projects. Nice.
+
+Your fully automated Fastlane file can now look like this:
 
 ```ruby
 platform :ios do
 
   before_all do
     #
-    # Bridge Ionic Workspace for UI Testing
+    # This will retrofit any existing schemes in fastlane/ionic/config/ios/ui-tests/
     #
     ionic_ios_snapshot(
     	team_id: "[YOUR TEAM ID]"
