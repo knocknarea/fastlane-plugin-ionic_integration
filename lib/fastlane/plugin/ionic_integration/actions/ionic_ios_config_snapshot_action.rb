@@ -50,7 +50,7 @@ module Fastlane
 
       def self.details
         # Optional:
-        'Creates a set of UI Unit Tests in #{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH} and configures an existing Ionic/Cordova Generated Xcode projec to use them'
+        "Creates a set of UI Unit Tests in #{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH} and configures an existing Ionic/Cordova Generated Xcode projec to use them"
       end
 
       def self.available_options
@@ -68,7 +68,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :ionic_scheme_name,
                                        env_name: 'IONIC_IOS_TEST_SCHEME',
                                        description: 'Scheme Name of the UI Unit Tests',
-                                       default_value: default_scheme_name,
+                                       default_value: IonicIntegration::IONIC_DEFAULT_UNIT_TEST_NAME,
                                        optional: false)
         ]
       end
