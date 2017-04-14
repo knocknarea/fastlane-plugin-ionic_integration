@@ -115,7 +115,7 @@ module Fastlane
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each { 
             |file| 
             UI.message "Adding UI Test Source #{file}"
-            files << snapGrp.new_reference(file) 
+            files << snapGrp.new_reference(File.absolute_path(file)) 
           }
 
         target.add_file_references(files)

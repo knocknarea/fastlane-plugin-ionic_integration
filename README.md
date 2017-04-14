@@ -22,7 +22,19 @@ Integrating Fastlane with Ionic Generated Projects
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
 
-**Note to author:** Please set up a sample project to make it easy for users to explore what your plugin does. Provide everything that is necessary to try out the plugin in this project (including a sample Xcode/Android project if necessary)
+To create a sample test you can add a lane like so:
+
+lane :setup_tests do
+    ionic_ios_config_snapshot(
+      ionic_scheme_name: "blah-blah"
+    )
+
+This will create a folder **fastlane/ionic/config/ios/ui-tests/blah-blah**
+
+In this folder will be the standard test files that you would expect for a UI Unit Test, Info.plist, Fastlane SWIFT file and a sample Unit Test ui-snapshots.swift
+
+**ionic_ios_config_snapshot** also executes the *ionic_config_snapshot* action to retrofit this unit test configuration into any existing XCode Project
+
 
 ## Run tests for this plugin
 
