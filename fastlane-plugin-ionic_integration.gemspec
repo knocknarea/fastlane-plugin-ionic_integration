@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-ionic_integration'
   spec.version       = Fastlane::IonicIntegration::VERSION
   spec.author        = 'Adrian Regan'
-  spec.email         = 'adrian@littlevista.net'
+  spec.email         = 'adrian.regan@gmail.com'
 
   spec.summary       = 'Integrating Fastlane with Ionic Generated Projects'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-ionic_integration"
+  spec.homepage      = "https://github.com/knocknarea/fastlane-plugin-ionic_integration"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
