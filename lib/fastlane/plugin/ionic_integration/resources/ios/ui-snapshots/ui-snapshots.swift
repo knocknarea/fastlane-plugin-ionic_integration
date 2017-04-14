@@ -27,14 +27,14 @@ class ui_snapshots: XCTestCase {
     
     func testSnapshots() {
 
-        #
-        # Place your own tests here. This is a starter example to get you going..
-        #
+        //
+        // Place your own tests here. This is a starter example to get you going..
+        //
         snapshot("app-launch")
         
-        # XCUIApplication().buttons["Your Button Name"].tap()
+        // XCUIApplication().buttons["Your Button Name"].tap()
         
-        # snapshot("after-button-pressed")
+        // snapshot("after-button-pressed")
                 
     }
     
