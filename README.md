@@ -41,11 +41,13 @@ Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plu
 
 To create a sample test you can add a lane like so:
 
+```ruby
 lane :setup_tests do
     ionic_ios_config_snapshot(
       ionic_scheme_name: "blah-blah"
     )
 end
+```
 
 This will create a folder **fastlane/ionic/config/ios/ui-tests/blah-blah**
 
@@ -56,6 +58,7 @@ In this folder will be the standard test files that you would expect for a UI Un
 
 To ensure that your configured unit tests are setup do:
 
+```ruby
 platform :ios do
 
   before_all do
@@ -78,7 +81,7 @@ platform :ios do
     )
   end
 end
-
+```
 
 You can now use this to fully automate the build process between ionic and fastlane, including snapshots.
 
