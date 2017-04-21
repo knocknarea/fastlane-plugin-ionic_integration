@@ -55,11 +55,11 @@ module Fastlane
         #
         # Find existing code group or unit tests and remove if needed.
         #
-        snapGrp = nil
+        snap_group = nil
         proj.groups.each do |g|
           next unless g.name == scheme_name
           g.clear
-          snapGrp = g
+          snap_group = g
           UI.important "Found existing Code Group #{g.name}. Will be replaced."
           break
         end
@@ -68,16 +68,16 @@ module Fastlane
         # Remove existing targets and groups if required.
         #
         target.nil? || target.remove_from_project
-        snapGrp.nil? || snapGrp.remove_from_project
+        snap_group.nil? || snap_group.remove_from_project
 
         target = nil
-        snapGrp = nil
+        snap_group = nil
 
         #
         # Ok, let's rock and roll
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
-        snapGrp = proj.new_group(scheme_name.to_s)
+        snap_group = proj.new_group(scheme_name.to_s)
 
         UI.message "Finding Main Target (of the Project)..."
         main_target = nil
@@ -110,7 +110,7 @@ module Fastlane
         # Link our fastlane configured UI Unit Tests into the project
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
           UI.message "Adding UI Test Source #{file}"
-          files << snapGrp.new_reference(File.absolute_path(file))
+          files << snap_group.new_reference(File.absolute_path(file))
         end
 
         target.add_file_references(files)
@@ -142,10 +142,10 @@ module Fastlane
         target.build_configuration_list.set_setting('DEVELOPMENT_TEAM', team_id)
 
         # Create a shared scheme for the UI tests
-        existingScheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
+        existing_scheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
 
         UI.message "Generating XCode Scheme #{scheme_name} to run UI Snapshot Tests"
-        scheme = File.exist?(existingScheme) ? Xcodeproj::XCScheme.new(existingScheme) : Xcodeproj::XCScheme.new
+        scheme = File.exist?(existing_scheme) ? Xcodeproj::XCScheme.new(existing_scheme) : Xcodeproj::XCScheme.new
 
         scheme.add_test_target(target)
 
@@ -191,10 +191,12 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :team_id,
                                        env_name: 'IONIC_TEAM_ID_IOS',
                                        description: 'Team Id in iTunesConnect or Apple Developer',
+                                       default_value: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
                                        optional: false),
           FastlaneCore::ConfigItem.new(key: :bundle_id,
                                        env_name: 'IONIC_BUNDLE_ID_IOS',
                                        description: 'The Bundle Id of the iOS App, eg: ie.littlevista.whateverapp',
+                                       default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
                                        optional: false)
 
         ]
