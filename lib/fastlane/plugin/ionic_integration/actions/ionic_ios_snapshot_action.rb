@@ -77,7 +77,7 @@ module Fastlane
         # Ok, let's rock and roll
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
-        snap_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder))
+        snap_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
 
         UI.message "Finding Main Target (of the Project)..."
         main_target = nil
@@ -121,7 +121,7 @@ module Fastlane
         # Link our fastlane configured UI Unit Tests into the project
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
           UI.message "Adding UI Test Source #{file}"
-          files << snap_group.new_reference(File.absolute_path(file))
+          files << snap_group.new_reference(File.absolute_path(file), '<absolute>')
         end
 
         target.add_file_references(files)
@@ -143,7 +143,7 @@ module Fastlane
           proj.root_object.attributes.store('TargetAttributes', { target.uuid => target_config })
         end
 
-        target.build_configuration_list.set_setting('INFOPLIST_FILE', "#{scheme_name}/Info.plist")
+        target.build_configuration_list.set_setting('INFOPLIST_FILE', File.absolute_path("#{config_folder}/Info.plist"))
         target.build_configuration_list.set_setting('SWIFT_VERSION', '3.0')
         target.build_configuration_list.set_setting('PRODUCT_NAME', "$(TARGET_NAME)")
         target.build_configuration_list.set_setting('TEST_TARGET_NAME', project_name)
