@@ -77,7 +77,7 @@ module Fastlane
         # Ok, let's rock and roll
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
-        snap_group = proj.new_group(scheme_name.to_s)
+        snap_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder))
 
         UI.message "Finding Main Target (of the Project)..."
         main_target = nil
@@ -91,11 +91,22 @@ module Fastlane
         main_target || UI.user_error!("Unable to locate Main Target for Ionic App in #{project_name}")
 
         # Create a product for our ui unit test
-        product_ref = proj.products_group.new_reference(scheme_name + '.xctest', :built_products)
+        product_ref_name = scheme_name + '.xctest'
+        proj.products_group.files.each do |ref|
+          if ref.path == product_ref_name
+            UI.message "Removing old #{ref.path}"
+            ref.remove_from_project
+          end
+        end
+
+        # product_ref.nil? || product_ref.remove_from_project
+
+        # product_ref = proj.products_group.new_reference(product_ref_name, :built_products)
 
         target = Xcodeproj::Project::ProjectHelper.new_target(proj, :ui_test_bundle,
                                                               scheme_name, :ios, target_os, proj.products_group, :swift)
 
+        product_ref = proj.products_group.find_file_by_path(product_ref_name)
         target.product_reference = product_ref
 
         UI.message "Adding Main Target Dependency: " + main_target.to_s
