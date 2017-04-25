@@ -1,3 +1,22 @@
-lane :test do
-  ionic_integration
+platform :ios do
+
+  before_all do
+    #
+    # This will retrofit any existing schemes in fastlane/ionic/config/ios/ui-tests/
+    #
+    ionic_ios_snapshot(
+    	team_id: "[YOUR TEAM ID]"
+    	bundle_id: "[YOUR APP BUNDLE ID]"
+    )
+  end
+
+  lane :release do
+  	# This will run the retrofitted UI Tests for you and create snapshots... :-)
+  	snapshot(
+      output_simulator_logs: true,
+      reinstall_app: false,
+      erase_simulator: true,
+      scheme: "ionic-screen-shots" # The name of a scheme to use, one that you generated with ionic_ios_config_snapshot
+    )
+  end
 end
