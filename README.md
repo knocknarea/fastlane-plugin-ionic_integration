@@ -104,7 +104,7 @@ If you open up Xcode and open the file 'ionic-screen-shots/ui-snapshots.swift' y
 
 In the XCode UI, select the scheme 'ionic-screen-shots' and click into the method 'testSnapshots()' (after the first snapshot). 
 
-<img src="https://cloud.githubusercontent.com/assets/12442390/25378856/2d2d09c8-29a3-11e7-8e1b-e7d4dc3d4543.png" width="475" height="65" alt="Select UI Scheme"/>
+<img src="https://cloud.githubusercontent.com/assets/12442390/25378856/2d2d09c8-29a3-11e7-8e1b-e7d4dc3d4543.png" width="475" height="56" alt="Select UI Scheme"/>
 
 You can now click on the 'Record UI Test' (Red Circle Icon). 
 
