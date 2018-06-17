@@ -5,7 +5,7 @@ platform :ios do
     # This will retrofit any existing schemes in fastlane/ionic/config/ios/ui-tests/
     #
     ionic_ios_snapshot(
-    	team_id: "[YOUR TEAM ID]"
+    	team_id: "[YOUR TEAM ID]",
     	bundle_id: "[YOUR APP BUNDLE ID]"
     )
   end
