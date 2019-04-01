@@ -144,7 +144,7 @@ module Fastlane
         end
 
         target.build_configuration_list.set_setting('INFOPLIST_FILE', File.absolute_path("#{config_folder}/Info.plist"))
-        target.build_configuration_list.set_setting('SWIFT_VERSION', '3.0')
+        target.build_configuration_list.set_setting('SWIFT_VERSION', '4.0')
         target.build_configuration_list.set_setting('PRODUCT_NAME', "$(TARGET_NAME)")
         target.build_configuration_list.set_setting('TEST_TARGET_NAME', project_name)
         target.build_configuration_list.set_setting('PRODUCT_BUNDLE_IDENTIFIER', "#{bundle_id}.#{scheme_name}")
